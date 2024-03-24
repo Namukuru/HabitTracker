@@ -1,0 +1,61 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">Frequency</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+     
+        {%if habits %}
+        {% for habit in habits %}
+         <tr>
+            <td><a href="{% url 'habit' habit.id %}" >{{habit.id}}</a></td>
+            <td>{{habit.name}}</td>
+            <td>{{habit.description}}</td>
+            <td>{{habit.start_date}}</td>
+            <td>{{habit.frequency}}</td>
+            
+          </tr>
+        {% endfor %}
+      {% endif %}
+      </tr>
+    </tbody>
+  </table>
+
+  {% else %}
+  <div class="col-md-6 offset-md-3">
+    <h1>Login</h1>
+    <br>
+    <form method="POST" action="{% url 'home' %}">
+      {% csrf_token %}
+
+      <form> 
+        <div class="mb-3">
+        
+          <input type="text" class="form-control" name="username" placeholder='Username' required>
+        
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control" name="password" placeholder='Password' required >
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </form>
+  </div>
+
+{% endif %}
+{% endblock %}
