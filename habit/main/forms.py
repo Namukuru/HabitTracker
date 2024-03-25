@@ -39,6 +39,6 @@ class AddRecordForm(forms.ModelForm):
   
   class Meta:
       model = Habit
-      exclude = ('user',)
+      fields = ('name','description', 'start_date','frequency')
       
       

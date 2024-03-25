@@ -12,8 +12,8 @@ def home(request):
   
   #Check to see if logging in 
   if request.method == "POST":
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     #Authenticate
     if username is not None and password is not None:
      user = authenticate(request, username=username, password=password)
@@ -24,6 +24,7 @@ def home(request):
      else:
       messages.success(request,"There was an error logging in, please try again")
       return redirect('home')
+    return redirect('home')
   else:
    return render(request, 'home.html', {'habits':habits})
 
@@ -67,17 +68,20 @@ def delete_habit(request,pk):
   else:
     messages.success(request,'You must login to delete the habit!')
     return redirect('home')
-  
-def add_habit(request):
-	form = AddRecordForm(request.POST or None)
-	if request.user.is_authenticated:
-		if request.method == "POST":
-			if form.is_valid():
-				add_habit = form.save()
-				messages.success(request, "Record Added Successfully")
-				return redirect('home')
-		return render(request, 'add_record.html', {'form':form})
-	else:
-		messages.success(request, "You Must Be Logged In...")
-		return redirect('home')
 
+def add_habit(request):
+    form = AddRecordForm(request.POST or None)  # Create the form
+
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if form.is_valid():
+                add_habit = form.save(commit=False)  # Don't commit yet
+                add_habit.user = request.user  # Assign current user
+                add_habit.save()  # Save the form data with assigned user
+
+                messages.success(request, "Record Added Successfully")
+                return redirect('home')
+        return render(request, 'add_record.html', {'form': form})  # Render form on GET
+    else:
+        messages.error(request, "You Must Be Logged In...")  # Use "error" for login requirement
+        return redirect('home')
