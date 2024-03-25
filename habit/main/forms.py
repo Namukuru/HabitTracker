@@ -34,7 +34,7 @@ class SignUpForm(UserCreationForm):
 class AddRecordForm(forms.ModelForm):
   name= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Habit Name', "class":"form-control"}), label="")
   description= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Description', "class":"form-control"}), label="")
-  start_date= forms.CharField(required=True, widget=forms.widgets.DateTimeInput(attrs={'placeholder':'Start Date', "class":"form-control"}), label="")
+  start_date= forms.DateField(required=True, widget=forms.widgets.DateTimeInput(attrs={'placeholder':'Start Date', "class":"form-control"}), label="")
   frequency= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Frequency', "class":"form-control"}), label="")
   
   class Meta:

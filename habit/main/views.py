@@ -15,12 +15,13 @@ def home(request):
     username = request.POST['username']
     password = request.POST['password']
     #Authenticate
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
+    if username is not None and password is not None:
+     user = authenticate(request, username=username, password=password)
+     if user is not None:
       login(request,user)
       messages.success(request, 'You have been logged in')
       return redirect('home')
-    else:
+     else:
       messages.success(request,"There was an error logging in, please try again")
       return redirect('home')
   else:
@@ -72,10 +73,11 @@ def add_habit(request):
 	if request.user.is_authenticated:
 		if request.method == "POST":
 			if form.is_valid():
-				form.save()
+				add_habit = form.save()
 				messages.success(request, "Record Added Successfully")
 				return redirect('home')
 		return render(request, 'add_record.html', {'form':form})
 	else:
 		messages.success(request, "You Must Be Logged In...")
 		return redirect('home')
+
