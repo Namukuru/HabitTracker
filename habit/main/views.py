@@ -85,3 +85,16 @@ def add_habit(request):
     else:
         messages.error(request, "You Must Be Logged In...")  # Use "error" for login requirement
         return redirect('home')
+      
+def update_habit(request,pk):
+  if request.user.is_authenticated:
+    current_habit = Habit.objects.get(id=pk)
+    form = AddRecordForm(request.POST or None, instance=current_habit)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Habit has been updated')
+      return redirect('home')
+    return render(request, 'update_record.html',{'form':form})  
+  else:
+    messages.success(request, 'You must be logged in...')
+    return redirect('home')
