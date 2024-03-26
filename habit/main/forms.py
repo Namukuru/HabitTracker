@@ -36,9 +36,25 @@ class AddRecordForm(forms.ModelForm):
   description= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Description', "class":"form-control"}), label="")
   start_date= forms.DateField(required=True, widget=forms.widgets.DateTimeInput(attrs={'placeholder':'Start Date', "class":"form-control"}), label="")
   frequency= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Frequency', "class":"form-control"}), label="")
+  habit_type = forms.ChoiceField(choices=Habit.HABIT_TYPE_CHOICES, required=True, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), label="Habit Type")
+
   
   class Meta:
       model = Habit
-      fields = ('name','description', 'start_date','frequency')
+      fields = ('name','description', 'start_date','frequency','habit_type')
       
-      
+      '''def clean(self):
+        cleaned_data = super().clean()
+        habit_type = cleaned_data.get('habit_type')
+
+        if habit_type == 'integer':
+            # Additional validation for integer habits if needed
+            pass
+        elif habit_type == 'yes_no':
+            # Additional validation for yes/no habits if needed
+            pass
+        elif habit_type == 'timer':
+            # Additional validation for timer habits if needed
+            pass
+
+        return cleaned_data'''

@@ -6,14 +6,21 @@
   <h1>Update Habit</h1>
   <br>
       <form method="POST">
+        
         {% csrf_token %}
          
         {{ form.as_p}}
 
+      
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <br>
         
         <button type="submit" class="btn btn-secondary">Update Habit</button>
-
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 
       </form>
 </div>

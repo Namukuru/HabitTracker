@@ -89,11 +89,14 @@ def add_habit(request):
 def update_habit(request,pk):
   if request.user.is_authenticated:
     current_habit = Habit.objects.get(id=pk)
-    form = AddRecordForm(request.POST or None, instance=current_habit)
-    if form.is_valid():
-      form.save()
-      messages.success(request, 'Habit has been updated')
-      return redirect('home')
+    if request.method=='POST':
+      form = AddRecordForm(request.POST or None, instance=current_habit)
+      if form.is_valid():
+        form.save()
+        messages.success(request, 'Habit has been updated')
+        return redirect('home')
+    else:  
+      form = AddRecordForm( instance=current_habit)
     return render(request, 'update_record.html',{'form':form})  
   else:
     messages.success(request, 'You must be logged in...')
