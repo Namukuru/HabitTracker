@@ -7,7 +7,6 @@ from .models import Habit
 # Create your views here.
 
 def home(request):
-  
   habits = Habit.objects.all()
   
   #Check to see if logging in 
@@ -15,18 +14,37 @@ def home(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     #Authenticate
-    if username is not None and password is not None:
-     user = authenticate(request, username=username, password=password)
-     if user is not None:
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
       login(request,user)
       messages.success(request, 'You have been logged in')
-      return redirect('home')
-     else:
+      return redirect('login')
+    else:
       messages.success(request,"There was an error logging in, please try again")
-      return redirect('home')
-    return redirect('home')
+      return redirect('login')
   else:
    return render(request, 'home.html', {'habits':habits})
+
+  
+def login_user(request):
+  
+  #Check to see if logging in 
+  if request.method == "POST":
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    #Authenticate
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request,user)
+        messages.success(request, 'You have been logged in')
+        return redirect('home')
+    else:
+      messages.success(request,"There was an error logging in, please try again")
+      return redirect('login_user')
+  else:
+   return render(request,'login_users.html',{})
+
+   
 
 def logout_user(request):
   logout(request)
@@ -48,6 +66,7 @@ def register_user(request):
       return redirect('home')
   else:
     form=SignUpForm() 
+    return render(request, 'register.html', {'form':form})
   return render(request, 'register.html', {'form':form})
 
 def habit_record(request,pk):
