@@ -7,7 +7,6 @@ from .models import Habit
 # Create your views here.
 
 def home(request):
-  habits = Habit.objects.all()
   
   #Check to see if logging in 
   if request.method == "POST":
@@ -23,7 +22,7 @@ def home(request):
       messages.success(request,"There was an error logging in, please try again")
       return redirect('login')
   else:
-   return render(request, 'home.html', {'habits':habits})
+   return render(request, 'home.html', {})
 
   
 def login_user(request):
@@ -37,7 +36,7 @@ def login_user(request):
     if user is not None:
         login(request,user)
         messages.success(request, 'You have been logged in')
-        return redirect('home')
+        return redirect('myhabit')
     else:
       messages.success(request,"There was an error logging in, please try again")
       return redirect('login_user')
@@ -83,10 +82,10 @@ def delete_habit(request,pk):
     delete_records = Habit.objects.get(id=pk)
     delete_records.delete()
     messages.success(request,'Habit deleted successfully!')
-    return redirect('home')
+    return redirect('myhabit')
   else:
     messages.success(request,'You must login to delete the habit!')
-    return redirect('home')
+    return redirect('myhabit')
 
 def add_habit(request):
     form = AddRecordForm(request.POST or None)  # Create the form
@@ -99,7 +98,7 @@ def add_habit(request):
                 add_habit.save()  # Save the form data with assigned user
 
                 messages.success(request, "Record Added Successfully")
-                return redirect('home')
+                return redirect('myhabit')
         return render(request, 'add_record.html', {'form': form})  # Render form on GET
     else:
         messages.error(request, "You Must Be Logged In...")  # Use "error" for login requirement
@@ -120,3 +119,11 @@ def update_habit(request,pk):
   else:
     messages.success(request, 'You must be logged in...')
     return redirect('home')
+  
+  
+def about(request):
+    return render(request, 'about.html')
+  
+def myhabit(request):
+  habits = Habit.objects.all()
+  return render(request, 'myhabit.html', {'habits':habits})

@@ -43,7 +43,7 @@ class AddRecordForm(forms.ModelForm):
       model = Habit
       fields = ('name','description', 'start_date','frequency','habit_type')
       
-      '''def clean(self):
+      def clean(self):
         cleaned_data = super().clean()
         habit_type = cleaned_data.get('habit_type')
 
@@ -57,4 +57,4 @@ class AddRecordForm(forms.ModelForm):
             # Additional validation for timer habits if needed
             pass
 
-        return cleaned_data'''
+        return cleaned_data

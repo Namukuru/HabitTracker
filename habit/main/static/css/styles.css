@@ -1,0 +1,32 @@
+#alertMessage {
+  text-align: center;
+}
+.container {
+  padding-top: 50px;
+  margin-top: 20px;
+}
+
+.navbar {
+    background-color: #333; /* Background color for the navbar */
+    padding: 10px;
+}
+
+.navbar ul {
+    list-style-type: none; /* Remove default list styles */
+    margin: 0;
+    padding: 0;
+}
+
+.navbar li {
+    display: inline; /* Display navbar links horizontally */
+}
+
+.navbar li a {
+    color: #fff; /* Text color for navbar links */
+    text-decoration: none; /* Remove underline from links */
+    padding: 10px 20px; /* Add padding to links */
+}
+
+.navbar li a:hover {
+    background-color: #555; /* Background color on hover */
+}
