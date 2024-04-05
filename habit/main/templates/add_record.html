@@ -5,16 +5,31 @@
 <div class="col-md-6 offset-md-3">
   <h1>Add Habit</h1>
   <br>
-      <form method="POST" action="{% url 'add_habit' %}">
-        {% csrf_token %}
-         
-        {{ form.as_p}}
+  <form method="POST" action="{% url 'add_habit' %}">
+    {% csrf_token %}
+     
+    {{ form.name }}
+    {{ form.category }}
+    {{ form.description }}
+    {{ form.start_date }}
+    {{ form.frequency }}
+    
 
-        <br>
-        
-        <button type="submit" class="btn btn-secondary">Add Habit</button>
-        <a href="{% url 'home' %}" class="btn btn-secondary">back</a>
-
-      </form>
+<br>
+ <form>
+    <div class="radio-container">
+      {{ form.habit_type }}
+    </div>
+  </form>
+<br>
+<div class="checkbox-container">
+  {{ form.completed}}
 </div>
+<br>
+<div class="space"></div>
+    <button type="submit" class="btn btn-secondary">Add Habit</button>
+    <a href="{% url 'myhabit' %}" class="btn btn-secondary">Back</a>
+  </form>
+</div>
+
 {% endblock %}

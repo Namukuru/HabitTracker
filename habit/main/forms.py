@@ -33,21 +33,22 @@ class SignUpForm(UserCreationForm):
 #add habits form
 class AddRecordForm(forms.ModelForm):
   name= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Habit Name', "class":"form-control"}), label="")
+  category= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Category', "class":"form-control"}), label="")
   description= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Description', "class":"form-control"}), label="")
   start_date= forms.DateField(required=True, widget=forms.widgets.DateTimeInput(attrs={'placeholder':'Start Date', "class":"form-control"}), label="")
   frequency= forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Frequency', "class":"form-control"}), label="")
   habit_type = forms.ChoiceField(choices=Habit.HABIT_TYPE_CHOICES, required=True, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}), label="Habit Type")
-
+  #completed = forms.BooleanField(required=False, label = "Completed") 
   
   class Meta:
       model = Habit
-      fields = ('name','description', 'start_date','frequency','habit_type')
+      fields = ('name', 'category','description', 'start_date','frequency','habit_type')
       
       def clean(self):
         cleaned_data = super().clean()
         habit_type = cleaned_data.get('habit_type')
 
-        if habit_type == 'integer':
+        if habit_type == 'integer': 
             # Additional validation for integer habits if needed
             pass
         elif habit_type == 'yes_no':
@@ -58,3 +59,5 @@ class AddRecordForm(forms.ModelForm):
             pass
 
         return cleaned_data
+      
+  

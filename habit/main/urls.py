@@ -12,5 +12,5 @@ urlpatterns = [
   path("update_habit/<int:pk>", views.update_habit, name="update_habit"), 
   path("about/", views.about, name="about"), 
   path("myhabit/", views.myhabit, name="myhabit"), 
-    
+  #path('mark_habit_complete/<int:pk>/',views.mark_habit_complete, name='mark_habit_complete'),
 ]

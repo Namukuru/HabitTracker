@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate,login, logout
 from django.contrib import messages
 from .forms import SignUpForm,AddRecordForm
@@ -106,7 +106,8 @@ def add_habit(request):
       
 def update_habit(request,pk):
   if request.user.is_authenticated:
-    current_habit = Habit.objects.get(id=pk)
+    current_habit = get_object_or_404(Habit, pk=pk)
+
     if request.method=='POST':
       form = AddRecordForm(request.POST or None, instance=current_habit)
       if form.is_valid():
@@ -127,3 +128,26 @@ def about(request):
 def myhabit(request):
   habits = Habit.objects.all()
   return render(request, 'myhabit.html', {'habits':habits})
+
+
+'''def mark_habit_complete(request, habit_id):
+  habit = get_object_or_404(Habit, pk=habit_id)
+  if request.method == 'POST':
+    form = MarkCompleteForm(request.POST)
+    if form.is_valid():
+      habit.completed_today = form.cleaned_data['completed']
+      habit.save()
+      # Success message or redirect to habit list
+      return redirect('myhabit')  # Replace 'habit_list' with your list view URL
+  else:
+    form = MarkCompleteForm()
+  return render(request, 'mark_complete.html', {'habit': habit, 'form': form})'''
+
+
+'''def habit_completed(request, pk):
+    habit = get_object_or_404(Habit, pk=pk)
+    if request.user == habit.user:
+        # Update habit as completed
+        habit.completed = True
+        habit.save()
+    return redirect('myhabit')'''

@@ -22,7 +22,7 @@
 }
 
 .navbar li a {
-    color: #fff; /* Text color for navbar links */
+    color: black; /* Text color for navbar links */
     text-decoration: none; /* Remove underline from links */
     padding: 10px 20px; /* Add padding to links */
 }
@@ -30,3 +30,11 @@
 .navbar li a:hover {
     background-color: #555; /* Background color on hover */
 }
+
+/* Prevent overlapping of buttons */
+.btn {
+    margin-right: 10px; /* Adjust spacing between buttons */
+  }
+.space{
+    margin-bottom: 500px;
+  }

@@ -8,12 +8,20 @@ class Habit(models.Model):
         ('timer', 'Timer'),
     )  
     name = models.CharField(max_length=100)
+    category = models.TextField(default= "")
     description = models.TextField()
     frequency = models.CharField(max_length=20)  # e.g., daily, weekly
     start_date = models.DateField()
     habit_type = models.CharField(max_length=10, choices=HABIT_TYPE_CHOICES, default = 'yes_no')
     
+    
     def __str__(self):
-      return (f"{self.name}-{self.description}-{self.frequency}-{self.start_date}-{self.habit_type}")
+      return (f"{self.name}-{self.category}-{self.description}-{self.frequency}-{self.start_date}-{self.habit_type}")
 
     
+class HabitCompletion(models.Model):
+    habit = models.ForeignKey(Habit, on_delete=models.CASCADE)
+    date_completed = models.DateField()
+
+    class Meta:
+        unique_together = ('habit', 'date_completed')  

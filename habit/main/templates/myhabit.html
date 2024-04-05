@@ -10,10 +10,12 @@
       <tr class="table-secondary">
         <th scope="col">ID</th>
         <th scope="col">Name</th>
+        <th scope="col">Category</th>
         <th scope="col">Description</th>
         <th scope="col">Start Date</th>
         <th scope="col">Frequency</th>
         <th scope="col">Habit Type</th>
+       
         
       </tr>
     </thead> 
@@ -24,10 +26,12 @@
          <tr>
             <td><a href="{% url 'habit' habit.id %}" >{{habit.id}}</a></td>
             <td>{{habit.name}}</td>
+            <td>{{habit.category}}</td>
             <td>{{habit.description}}</td>
             <td>{{habit.start_date}}</td>
             <td>{{habit.frequency}}</td>
             <td>{{habit.habit_type}}</td>
+            
             
           </tr>
         {% endfor %}
