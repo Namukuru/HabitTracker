@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path  # type: ignore
 from . import views
 
 urlpatterns = [
@@ -12,5 +12,5 @@ urlpatterns = [
   path("update_habit/<int:pk>", views.update_habit, name="update_habit"), 
   path("about/", views.about, name="about"), 
   path("myhabit/", views.myhabit, name="myhabit"), 
-  #path('mark_habit_complete/<int:pk>/',views.mark_habit_complete, name='mark_habit_complete'),
+  path("mark_habit_completed/<int:habit_id>/",views.mark_habit_completed, name="mark_habit_completed"),
 ]

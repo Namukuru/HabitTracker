@@ -17,11 +17,4 @@ class Habit(models.Model):
     
     def __str__(self):
       return (f"{self.name}-{self.category}-{self.description}-{self.frequency}-{self.start_date}-{self.habit_type}")
-
-    
-class HabitCompletion(models.Model):
-    habit = models.ForeignKey(Habit, on_delete=models.CASCADE)
-    date_completed = models.DateField()
-
-    class Meta:
-        unique_together = ('habit', 'date_completed')  
+ 

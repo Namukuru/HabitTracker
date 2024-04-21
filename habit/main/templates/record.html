@@ -9,6 +9,17 @@
       {{habit_record.start_date}}</br>
       {{habit_record.frequency}}</br>
       {{habit_record.habit_type}}</br>
+      {% for habit in habits %}
+  <div>
+    <span>{{ habit.name }}</span>
+    {% if habit.completed %}
+      <span style="color: green;">Completed</span>
+    {% else %}
+      <button class="complete-habit" data-habit-id="{{ habit.id }}">Mark as Completed</button>
+    {% endif %}
+  </div>
+{% endfor %}
+
 
       <!--{% for habit in habits %}
       <p>Completed: {% if habit.completed %}Yes{% else %}No{% endif %}</p>
@@ -33,4 +44,6 @@
 <a href="{% url 'myhabit' %}" class="btn btn-secondary">Back</a>
 <a href="{% url 'delete_habit' habit_record.id %}" class="btn btn-danger">Delete</a>
 <a href="{% url 'update_habit' habit_record.id %}" class="btn btn-secondary">Update Habit</a>
+
+
 {% endblock %}

@@ -15,6 +15,7 @@
         <th scope="col">Start Date</th>
         <th scope="col">Frequency</th>
         <th scope="col">Habit Type</th>
+        <th scope="col">Status</th>
        
         
       </tr>
@@ -31,7 +32,16 @@
             <td>{{habit.start_date}}</td>
             <td>{{habit.frequency}}</td>
             <td>{{habit.habit_type}}</td>
-            
+    
+            <td>{% if habit.completed %}
+                  <span style="color: green;">Completed</span>
+                {% else %}
+                  <button class="complete-habit" data-habit-id="{{ habit.id }}">Mark as Completed</button>
+                {% endif %}
+
+              </td>
+            <!-- Example HTML to mark a habit as completed 
+            <td><button class="complete-habit" data-habit-id="{{ habit.id }}">Mark as Completed</button></td>-->
             
           </tr>
         {% endfor %}

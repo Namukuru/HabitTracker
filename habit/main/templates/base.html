@@ -10,8 +10,46 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    #alertMessage {
+      text-align: center;
+    }
+    .container {
+      padding-top: 50px;
+      margin-top: 20px;
+    }
+    
+    .navbar {
+        background-color: #333; /* Background color for the navbar */
+        padding: 10px;
+    }
+    
+    .navbar ul {
+        list-style-type: none; /* Remove default list styles */
+        margin: 0;
+        padding: 0;
+    }
+    
+    .navbar li {
+        display: inline; /* Display navbar links horizontally */
+    }
+    
+    .navbar li a {
+        color: black; /* Text color for navbar links */
+        text-decoration: none; /* Remove underline from links */
+        padding: 10px 20px; /* Add padding to links */
+    }
+    
+    .navbar li a:hover {
+        background-color: #555; /* Background color on hover */
+    }
+    
+    /* Prevent overlapping of buttons */
+    .btn {
+        margin-right: 10px; /* Adjust spacing between buttons */
+      }
+  </style>    
   </head>
   <body>
     {% include 'navbar.html' %}
@@ -49,5 +87,60 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var completeButtons = document.querySelectorAll('.complete-habit');
+    
+        completeButtons.forEach(function(button) {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            var habitId = this.getAttribute('data-habit-id');
+    
+            fetch('/mark_habit_completed/' + habitId + '/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+              },
+              body: JSON.stringify({})
+            })
+            .then(function(response) {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(function(data) {
+              if (data.success) {
+                // Update button text and disable it
+                button.textContent = 'Completed';
+                button.disabled = true;
+                button.classList.add('btn-success'); // Optionally add a success button style
+              } else {
+                throw new Error('Failed to mark habit as completed');
+              }
+            })
+            .catch(function(error) {
+              console.error(error);
+              alert('Error occurred while marking habit as completed');
+            });
+          });
+        });
+    
+        function getCSRFToken() {
+          var csrfToken = null;
+          var cookies = document.cookie.split(';');
+          cookies.forEach(function(cookie) {
+            var cookiePair = cookie.trim().split('=');
+            if (cookiePair[0] === 'csrftoken') {
+              csrfToken = cookiePair[1];
+            }
+          });
+          return csrfToken;
+        }
+      });
+    
+    
+  </script>
   </body>
 </html>
