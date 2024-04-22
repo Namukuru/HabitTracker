@@ -4,24 +4,26 @@
 {% block content %}
 
   {% if user.is_authenticated %}
+  
+  <h1>{{user.username}}</h1>
 
   <table class="table table-hover table-bordered table-striped">
-    <thead>
-      <tr class="table-secondary">
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Category</th>
-        <th scope="col">Description</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">Frequency</th>
-        <th scope="col">Status</th>
-       
-        
-      </tr>
-    </thead> 
-    <tbody>
      
         {%if habits %}
+        <thead>
+          <tr class="table-secondary">
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Description</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Frequency</th>
+            <th scope="col">Status</th>
+           
+            
+          </tr>
+        </thead> 
+        <tbody>
         {% for habit in habits %}
          <tr>
             <td><a href="{% url 'habit' habit.id %}" >{{habit.id}}</a></td>
@@ -42,11 +44,15 @@
 
           </tr>
         {% endfor %}
+
       {% endif %}
+
       </tr>
     </tbody>
   </table>
 
-  
+  {%else%}
+  <p>No records</p>
+
 {% endif %}
 {% endblock %}

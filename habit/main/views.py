@@ -98,7 +98,7 @@ def add_habit(request):
         if form.is_valid():
             # Save the form with the selected habit type
             habit = form.save(commit=False)
-            habit.habit_type = request.POST.get('selected_habit_type')
+            habit.user = request.user
             habit.save()
             messages.success(request, 'Habit added successfully!')
             return redirect('myhabit')
@@ -132,8 +132,9 @@ def about(request):
     return render(request, 'about.html')
   
 def myhabit(request):
-  habits = Habit.objects.all()
-  return render(request, 'myhabit.html', {'habits':habits})
+  # Filter habits for the logged-in user
+    habits = Habit.objects.filter(user=request.user)
+    return render(request, 'myhabit.html', {'habits':habits})
        
 @require_POST
 def mark_habit_completed(request,habit_id):

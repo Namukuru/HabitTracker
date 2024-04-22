@@ -10,7 +10,7 @@ class Habit(models.Model):
         ('weekly', 'Weekly'),
         ('monthly', 'Monthly'),
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1) 
     
     name = models.CharField(max_length=100)
     
@@ -26,5 +26,5 @@ class Habit(models.Model):
     
     
     def __str__(self):
-      return (f"{self.name}-{self.category}-{self.description}-{self.frequency}-{self.start_date}-{self.completed}")
+      return (f"{self.name}-{self.category}-{self.description}-{self.frequency}-{self.start_date}-{self.completed}-{self.user}")
  
