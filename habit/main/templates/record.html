@@ -4,12 +4,13 @@
   <h5 class="card-header">{{habit_record.name}}</h5>
   <div class="card-body">
     <p class="card-text">
-      {{habit_record.category}}</br>
-      {{habit_record.description}}</br>
-      {{habit_record.start_date}}</br>
-      {{habit_record.frequency}}</br>
-      {{habit_record.habit_type}}</br>
-      {% for habit in habits %}
+      {{habit_record.category}}</p>
+    <p class="card-text">{{habit_record.description}}</p>
+    <p class="card-text">{{habit_record.start_date}}</p>
+    <p class="card-text">{{habit_record.frequency}}</p>
+    
+
+  {% for habit in habits %}
   <div>
     <span>{{ habit.name }}</span>
     {% if habit.completed %}
@@ -18,32 +19,17 @@
       <button class="complete-habit" data-habit-id="{{ habit.id }}">Mark as Completed</button>
     {% endif %}
   </div>
-{% endfor %}
-
-
-      <!--{% for habit in habits %}
-      <p>Completed: {% if habit.completed %}Yes{% else %}No{% endif %}</p>
-      {{habit.id}}
-      {% if not habit.completed %}
-          <form action="{% url 'habit_completed' habit.pk %}" method="post">
-              {% csrf_token %}
-              <button type="submit">Mark as Completed</button>
-          </form>
-      {% endif %}
-      {% endfor %}
-        -->
-
-
-    </p>
-    
-  </div>
-</div>
+  {% endfor %}
 
 </div>
+</div>
+
 <br><br>
-<a href="{% url 'myhabit' %}" class="btn btn-secondary">Back</a>
-<a href="{% url 'delete_habit' habit_record.id %}" class="btn btn-danger">Delete</a>
-<a href="{% url 'update_habit' habit_record.id %}" class="btn btn-secondary">Update Habit</a>
 
+<div col-md-6 offset-md-3>
+  <a href="{% url 'myhabit' %}" class="btn btn-secondary">Back</a>
+  <a href="{% url 'delete_habit' habit_record.id %}" class="btn btn-danger">Delete</a>
+  <a href="{% url 'update_habit' habit_record.id %}" class="btn btn-secondary">Update Habit</a>
+</div>
 
 {% endblock %}

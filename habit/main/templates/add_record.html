@@ -8,31 +8,31 @@
   <form method="POST" action="{% url 'add_habit' %}">
     {% csrf_token %}
      
-    {{ form.name }}
-    {{ form.category }}
-    {{ form.description }}
-    {{ form.start_date }}
-    {{ form.frequency }}
-    
-
-<br>
- <form>
-    <div class="radio-container">
-      {{ form.habit_type }}
+    <div class="mb-3">
+      
+      {{ form.name }}
     </div>
-  </form>
-<br>
-<div class="checkbox-container">
-  {{ form.completed}}
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
+    <div class="mb-3">
+      
+      {{ form.category }}
+    </div>
+    <div class="mb-3">
+      
+      {{ form.description }}
+    </div>
+    <div class="mb-3">
+      
+      {{ form.start_date }}
+    </div>
+    <div class="mb-3">
+      {{ form.frequency.label_tag }}
+      {{ form.frequency }}
+    </div>
+  
     <button type="submit" class="btn btn-secondary">Add Habit</button>
     <a href="{% url 'myhabit' %}" class="btn btn-secondary">Back</a>
   </form>
 </div>
 
+  
 {% endblock %}

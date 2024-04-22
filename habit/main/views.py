@@ -6,6 +6,7 @@ from .models import Habit
 from django.http import HttpResponse, JsonResponse
 import datetime
 from django.views.decorators.http import require_POST
+from .tasks import update_habit_completion_statuses
 
 
 # Create your views here.
@@ -63,10 +64,10 @@ def register_user(request):
       #user authentication
       username = form.cleaned_data['username']
       password = form.cleaned_data['password1']
-      user = authenticate(username=username,pasword=password)
+      user = authenticate(username=username,password=password)
       login(request,user)
-      messages.success(request,'You have sucessfully registered, welcome')
-      return redirect('home')
+      messages.success(request,'You have successfully registered, welcome')
+      return redirect('login')
   else:
     form=SignUpForm() 
     return render(request, 'register.html', {'form':form})
@@ -92,21 +93,22 @@ def delete_habit(request,pk):
     return redirect('myhabit')
 
 def add_habit(request):
-    form = AddRecordForm(request.POST or None)  # Create the form
-
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            if form.is_valid():
-                add_habit = form.save(commit=False)  # Don't commit yet
-                add_habit.user = request.user  # Assign current user
-                add_habit.save()  # Save the form data with assigned user
-
-                messages.success(request, "Record Added Successfully")
-                return redirect('myhabit')
-        return render(request, 'add_record.html', {'form': form})  # Render form on GET
+    if request.method == 'POST':
+        form = AddRecordForm(request.POST)
+        if form.is_valid():
+            # Save the form with the selected habit type
+            habit = form.save(commit=False)
+            habit.habit_type = request.POST.get('selected_habit_type')
+            habit.save()
+            messages.success(request, 'Habit added successfully!')
+            return redirect('myhabit')
+        else:
+            messages.error(request, 'Error adding habit. Please check the form.')
     else:
-        messages.error(request, "You Must Be Logged In...")  # Use "error" for login requirement
-        return redirect('home')
+        form = AddRecordForm()
+    
+    return render(request, 'add_record.html', {'form': form})
+
       
 def update_habit(request,pk):
   if request.user.is_authenticated:
@@ -117,12 +119,12 @@ def update_habit(request,pk):
       if form.is_valid():
         form.save()
         messages.success(request, 'Habit has been updated')
-        return redirect('home')
+        return redirect('myhabit')
     else:  
       form = AddRecordForm( instance=current_habit)
     return render(request, 'update_record.html',{'form':form})  
   else:
-    messages.success(request, 'You must be logged in...')
+    messages.success(request, 'You must be logged in to add a habit')
     return redirect('home')
   
   
@@ -136,10 +138,25 @@ def myhabit(request):
 @require_POST
 def mark_habit_completed(request,habit_id):
     try:
-        habit = Habit.objects.get(id=habit_id)
-        habit.completed = True
-        habit.save()
-        return JsonResponse({'success': True})
+        # Retrieve the habit object by ID (ensure it exists)
+        habit = get_object_or_404(Habit, id=habit_id)
+
+        if not habit.completed:
+            habit.completed = True
+            habit.save()
+
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': True, 'message': 'Habit already marked as completed'})
+
     except Habit.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Habit not found'})
+
+      
+def trigger_habit_completion_update(request):
+    update_habit_completion_statuses.delay()
+
+    return HttpResponse("Habit completion statuses update triggered successfully!")
+
 
