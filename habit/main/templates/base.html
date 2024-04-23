@@ -1,25 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Habit Tracker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HABIT TRACKER</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+  <style>
+    #alertMessage {
+      text-align: center;
+    }
+    .container {
+      padding-top: 50px;
+      margin-top: 20px;
+    }
+    
+    .navbar {
+        background-color: #333; /* Background color for the navbar */
+        padding: 10px;
+    }
+    
+    .navbar ul {
+        list-style-type: none; /* Remove default list styles */
+        margin: 0;
+        padding: 0;
+    }
+    
+    .navbar li {
+        display: inline; /* Display navbar links horizontally */
+    }
+    
+    .navbar li a {
+        color: black; /* Text color for navbar links */
+        text-decoration: none; /* Remove underline from links */
+        padding: 10px 20px; /* Add padding to links */
+    }
+    
+    .navbar li a:hover {
+        background-color: #555; /* Background color on hover */
+    }
+    
+    /* Prevent overlapping of buttons */
+    .btn {
+        margin-right: 10px; /* Adjust spacing between buttons */
+      }
+  </style>    
   </head>
   <body>
     {% include 'navbar.html' %}
     <div class="container">
-      <br/>
-      <!--authenticating users-->
-      {% if messages%}
-        {% for message in messages %}
+      <br />
+      <!--Creation of the alert messages-->
+      {% if messages %}{% for message in messages %}
+      <div
+        class="alert alert-warning alert-dismissible fade show"
+        role="alert"
+        id="alertMessage"
+      >
         {{ message }}
-        {% endfor %}
-        {% endif %}
-
-    {% block content %}
-    {% endblock %}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}{% endif %} {% block content %}{% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!--Message timing out: after 2 seconds-->
+    <script>
+      setTimeout(function () {
+        var alertMessage = document.getElementById("alertMessage");
+        if (alertMessage) {
+          alertMessage.remove();
+        }
+      }, 2000);
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var completeButtons = document.querySelectorAll('.complete-habit');
+    
+        completeButtons.forEach(function(button) {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            var habitId = this.getAttribute('data-habit-id');
+    
+            fetch('/mark_habit_completed/' + habitId + '/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+              },
+              body: JSON.stringify({})
+            })
+            .then(function(response) {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(function(data) {
+              if (data.success) {
+                // Update button text and disable it
+                button.textContent = 'Completed';
+                button.disabled = true;
+                button.classList.add('btn-success'); // Optionally add a success button style
+              } else {
+                throw new Error('Failed to mark habit as completed');
+              }
+            })
+            .catch(function(error) {
+              console.error(error);
+              alert('Error occurred while marking habit as completed');
+            });
+          });
+        });
+    
+        function getCSRFToken() {
+          var csrfToken = null;
+          var cookies = document.cookie.split(';');
+          cookies.forEach(function(cookie) {
+            var cookiePair = cookie.trim().split('=');
+            if (cookiePair[0] === 'csrftoken') {
+              csrfToken = cookiePair[1];
+            }
+          });
+          return csrfToken;
+        }
+      });
+    
+    
+  </script>
   </body>
 </html>
